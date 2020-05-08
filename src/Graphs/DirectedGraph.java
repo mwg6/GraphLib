@@ -5,16 +5,18 @@ import java.util.*;
 
 public class DirectedGraph implements IGraph {
     private Map<Object, HashSet<Object>> connections;
+
     public DirectedGraph(){
         connections = new HashMap<>();
     }
+
     @Override
     public boolean addVertex(Object v) {
         if(connections.containsKey(v)){
             return false;
         }
         else{
-            connections.put(v, connections.getOrDefault(v, new HashSet<>()));
+            connections.put(v, new HashSet<>());
             return true;
         }
     }
