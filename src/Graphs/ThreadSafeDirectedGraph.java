@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class ThreadSafeDirectedGraph implements IGraph {
+public class ThreadSafeDirectedGraph extends DirectedGraph {
     private Map<Object, Set<Object>> connections;
 
     public ThreadSafeDirectedGraph(){
