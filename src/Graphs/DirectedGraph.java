@@ -1,48 +1,51 @@
 package Graphs;
 
-import Vertexes.IVertex;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DirectedGraph implements IGraph {
-    private Map<IVertex, HashSet<IVertex>> connections;
-
+    private Map<Object, HashSet<Object>> connections;
+    public DirectedGraph(){
+        connections = new HashMap<>();
+    }
     @Override
-    public boolean addVertex(IVertex v) {
+    public boolean addVertex(Object v) {
         if(connections.containsKey(v)){
             return false;
         }
         else{
-            connections.put(v, v.getEdges());
+            connections.put(v, connections.getOrDefault(v, new HashSet<>()));
             return true;
         }
     }
 
     @Override
-    public List<IVertex> getPath(IVertex v1, IVertex v2) {
+    public List<Object> getPath(Object v1, Object v2) {
         if(!connections.containsKey(v1)||!connections.containsKey(v2)){
             //can't path if either doesn't exist;
             return null;
         }
-
-        return pathFinder(v1, v2, new HashSet<IVertex>(), new ArrayList<IVertex>());
+        ArrayList<Object> path = new ArrayList<>();
+        return pathFinder(v1, v2, new HashSet<Object>(), path);
 
     }
 
-    private List<IVertex> pathFinder(IVertex v1, IVertex v2, HashSet<IVertex> visited, List<IVertex> path){
+    private List<Object> pathFinder(Object v1, Object v2, HashSet<Object> visited, List<Object> path){
         if(v1.equals(v2)){
             path.add(v1);
             return path;
         }
 
-        for(IVertex v : connections.get(v1)){
-            if(!visited.contains(v1)){
+        for(Object v : connections.get(v1)){
+            if(!visited.contains(v)){
                 visited.add(v1);
                 path.add(v1);
-                pathFinder(v,v2,visited, path);
+                //clunky
+                List<Object> tmp = pathFinder(v,v2,visited, path);
+                if(tmp!=null){
+                    return tmp;
+                }
+
                 path.remove(v1);
             }
         }
@@ -50,7 +53,7 @@ public class DirectedGraph implements IGraph {
     }
 
     @Override
-    public boolean addEdge(IVertex v1, IVertex v2) {
+    public boolean addEdge(Object v1, Object v2) {
         if(connections.containsKey(v1)&&connections.containsKey(v2)){
             //case both exist and just need unidirectional connection
             if(connections.get(v1).contains(v2)){
@@ -59,8 +62,9 @@ public class DirectedGraph implements IGraph {
                 return false;
             }
             else{
-                v1.addEdge(v2);
-                connections.put(v1, v1.getEdges());
+                HashSet tmp = connections.get(v1);
+                tmp.add(v2);
+                connections.put(v1, tmp);
                 return true;
             }
         }
