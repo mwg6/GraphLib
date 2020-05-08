@@ -5,6 +5,10 @@ import java.util.*;
 public class UndirectedGraph implements IGraph {
     private Map<Object, HashSet<Object>> connections;
 
+    public UndirectedGraph(){
+        connections = new HashMap<>();
+    }
+
     @Override
     public boolean addVertex(Object v) {
         if(connections.containsKey(v)){
@@ -61,8 +65,8 @@ public class UndirectedGraph implements IGraph {
             else{
                 HashSet<Object> tmp1 = connections.get(v1);
                 HashSet<Object> tmp2 = connections.get(v2);
-                tmp1.add(v1);
-                tmp2.add(v2);
+                tmp1.add(v2);
+                tmp2.add(v1);
 
                 connections.put(v1, tmp1);
                 connections.put(v2, tmp2);
