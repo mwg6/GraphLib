@@ -41,7 +41,6 @@ public class UndirectedGraph implements IGraph {
             if(!visited.contains(v)){
                 visited.add(v1);
                 path.add(v1);
-                //clunky
                 List<Object> tmp = pathFinder(v,v2,visited, path);
                 if(tmp!=null){
                     return tmp;
